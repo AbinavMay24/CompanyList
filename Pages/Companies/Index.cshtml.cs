@@ -19,7 +19,7 @@ namespace CompanyList.Pages.Companies
             _context = context;
         }
 
-        public IList<Company> Company { get;set; }
+        public IList<Company> Company { get; set; }
 
         //Modified 
         [BindProperty(SupportsGet = true)]
@@ -33,16 +33,23 @@ namespace CompanyList.Pages.Companies
         {
             //Modified 
             var companies = from m in _context.Company
-                         select m;
+                            select m;
             if (!string.IsNullOrEmpty(SearchString))
             {
-                companies = companies.Where(s => s.Title.Contains(SearchString));
+                //companies = companies.Select(s => s.Title.StartsWith(SearchString));
+                companies = companies.Where(s => s.Title.StartsWith(SearchString));
+            }
+
+            if (!string.IsNullOrEmpty(SearchString))
+            {
+                Company = await companies.ToListAsync();
+            }
+            else
+            {
+                Company = await _context.Company.ToListAsync();
             }
 
 
-
-            //Modified 
-            Company = await _context.Company.ToListAsync();
         }
     }
 }
