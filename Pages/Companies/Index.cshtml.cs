@@ -24,10 +24,10 @@ namespace CompanyList.Pages.Companies
         //Modified 
         [BindProperty(SupportsGet = true)]
         public string SearchString { get; set; }
-        // Requires using Microsoft.AspNetCore.Mvc.Rendering;
 
-        //Modified
-
+        //Modified 
+        [BindProperty(SupportsGet = true)]
+        public string OrderFilter { get; set; }
 
         public async Task OnGetAsync()
         {
@@ -36,20 +36,30 @@ namespace CompanyList.Pages.Companies
                             select m;
             if (!string.IsNullOrEmpty(SearchString))
             {
-                //companies = companies.Select(s => s.Title.StartsWith(SearchString));
-                companies = companies.Where(s => s.Title.StartsWith(SearchString));
-            }
+                Company = await companies.Where(s => s.Title.StartsWith(SearchString)).ToListAsync();
 
-            if (!string.IsNullOrEmpty(SearchString))
-            {
-                Company = await companies.ToListAsync();
+                if (OrderFilter == "Ascending")
+                {
+                    Company = Company.OrderBy(x => x.Title).ToList();
+                }
+                else
+                {
+                    Company = Company.OrderByDescending(x => x.Title).ToList();
+                }
             }
             else
             {
                 Company = await _context.Company.ToListAsync();
+
+                if (OrderFilter == "Ascending")
+                {
+                    Company = Company.OrderBy(x => x.Title).ToList();
+                }
+                else
+                {
+                    Company = Company.OrderByDescending(x => x.Title).ToList();
+                }
             }
-
-
         }
     }
 }

@@ -12,10 +12,12 @@
 </p>
 
 <form>
-    <p>
-        Title: <input type="text" asp-for="SearchString" />
-        <input type="submit" value="Filter" />
-    </p>
+    Search string: <input type="text" asp-for="SearchString" />
+    <select asp-for="OrderFilter">
+        <option value="Ascending">Ascending</option>
+        <option value="Descending">Descending</option>
+    </select>
+    <input type="submit" value="Get results" />
 </form>
 
 <table class="table">
@@ -28,17 +30,18 @@
         </tr>
     </thead>
     <tbody>
-@foreach (var item in Model.Company) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Title)
-            </td>
-            <td>
-                <a asp-page="./Edit" asp-route-id="@item.ID">Edit</a> |
-                <a asp-page="./Details" asp-route-id="@item.ID">Details</a> |
-                <a asp-page="./Delete" asp-route-id="@item.ID">Delete</a>
-            </td>
-        </tr>
-}
+        @foreach (var item in Model.Company)
+        {
+            <tr>
+                <td>
+                    @Html.DisplayFor(modelItem => item.Title)
+                </td>
+                <td>
+                    <a asp-page="./Edit" asp-route-id="@item.ID">Edit</a> |
+                    <a asp-page="./Details" asp-route-id="@item.ID">Details</a> |
+                    <a asp-page="./Delete" asp-route-id="@item.ID">Delete</a>
+                </td>
+            </tr>
+        }
     </tbody>
 </table>
